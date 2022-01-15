@@ -5,7 +5,7 @@
 #include "IShape.h"
 
 const int XMAX = 80; // Размер экрана
-const int YMAX = 65;
+const int YMAX = 30;
 
 // Цвет
 enum Color

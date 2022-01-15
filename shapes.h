@@ -17,7 +17,7 @@ class Line : public IShape
 
 public:
     Line(Point a, Point b) : w(a), e(b){};
-    Line(Point a, int L) : w(Point(a.x + L - 1, a.y)), e(a){};
+    Line(Point a, int L) : w(Point(a.x + L - 1, a.y)), e(a) {};
 
     Point north() const { return Point((w.x + e.x) / 2, (w.y + e.y) / 2); }
     Point south() const { return Point((w.x + e.x) / 2, (w.y + e.y) / 2); }
@@ -116,8 +116,9 @@ Rectangle::Rectangle(Point a, Point b)
 
 void Rectangle::draw()
 {
-    Point nw(sw.x, ne.y);
-    Point se(ne.x, sw.y);
+    auto nw = nwest();
+    auto se = seast();
+
     Screen::put_line(nw, ne);
     Screen::put_line(ne, se);
     Screen::put_line(se, sw);
@@ -223,10 +224,11 @@ class RightTriangle : public IRotatable, public IReflectable
     void move(int a, int b)
     {
         h1.x += a;
-        h1.y += b;
         h2.x += a;
-        h2.y += b;
         a1.x += a;
+
+        h1.y += b;
+        h2.y += b;
         a1.y += b;
     }
 
@@ -240,30 +242,104 @@ void RightTriangle::draw()
     Screen::put_line(h1, h2);
 }
 
+class HalfCircle : public Rectangle, public IReflectable {
+  bool _isReflected;
+public:
+	HalfCircle(Point a, Point b, bool r = true) : Rectangle(a, b), _isReflected(r) {}
+
+	void draw();
+	void flip_horisontally() {};
+	void flip_vertically() { _isReflected = !_isReflected; };
+};
+
+void HalfCircle::draw()
+{
+    auto sw = this->swest();
+    auto ne = this->neast();
+
+    int x0 = (sw.x + ne.x)/2, y0 = _isReflected ? sw.y : ne.y;
+	int radius = (ne.x - sw.x)/2;
+	int x = 0, y = radius, delta = 2 - 2 * radius, error = 0;
+
+    while(y >= 0)
+    {
+        if(_isReflected)
+        {
+            Screen::put_point(x0 + x, y0 + y*0.7);
+            Screen::put_point(x0 - x, y0 + y*0.7);
+        }
+        else
+        {
+            Screen::put_point(x0 + x, y0 - y*0.7);
+            Screen::put_point(x0 - x, y0 - y*0.7);
+        }
+
+        error = 2 * (delta + y) - 1;
+        if(delta < 0 && error <= 0)
+        {
+            ++x;
+            delta += 2 * x + 1;
+            continue;
+        }
+
+        error = 2 * (delta - x) - 1;
+        if(delta > 0 && error > 0)
+        {
+            --y;
+            delta += 1 - 2 * y;
+            continue;
+        }
+
+        ++x; delta += 2 * (x - y);  --y;
+    }
+}
+
+
 // Поместить p над q
 void up(IShape* p, const IShape* q)
 {
-    Point n = q->north();
-    Point s = p->south();
-    p->move(n.x - s.x, n.y - s.y + 1);
+    auto ps = p->south();
+    auto qn = q->north();
+
+    p->move(qn.x - ps.x, qn.y - ps.y + 1);
 }
 
-void leftUp(IShape* p, const IShape* q)
+void down(IShape* p, const IShape* q)
 {
-    p->move(q->nwest().x - p->swest().x, q->nwest().y - p->swest().y + 1);
+    auto ps = p->south();
+    auto qn = q->north();
+
+    p->move(ps.x - qn.x, ps.y - qn.y - 1);
 }
 
-void rightUp(IShape* p, const IShape* q)
-{
-    p->move(q->neast().x - p->seast().x, q->nwest().y - p->swest().y + 1);
-}
+// void leftUp(IShape* p, const IShape* q)
+// {
+//     p->move(
+//         q->nwest().x - p->swest().x,
+//         q->nwest().y - p->swest().y + 1
+//     );
+// }
 
-void rightDown(IShape* p, const IShape* q)
-{
-    p->move(q->east().x - p->west().x, q->swest().y - p->nwest().y);
-}
+// void rightUp(IShape* p, const IShape* q)
+// {
+//     p->move(
+//         q->neast().x - p->seast().x,
+//         q->nwest().y - p->swest().y + 1
+//     );
+// }
 
-void leftDown(IShape* p, const IShape* q)
-{
-    p->move(q->west().x - p->east().x, q->swest().y - p->nwest().y);
-}
+// void rightDown(IShape* p, const IShape* q)
+// {
+//     p->move(
+//         q->east().x - p->west().x,
+//         q->swest().y - p->nwest().y
+//     );
+// }
+
+// void leftDown(IShape* p, const IShape* q)
+// {
+//     p->move(
+//         q->west().x - p->east().x,
+//         q->swest().y - p->nwest().y
+//     );
+// }

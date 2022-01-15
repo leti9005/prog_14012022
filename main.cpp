@@ -14,9 +14,10 @@ class MyShape : public Rectangle
     // 11
     Line* r_eye; // правый глаз
 
+    HalfCircle* beard;
+
     // Rectangle* hat; point(0, 0), point(14, 5)
     // Line* brim; point(0,15), 17
-    // HalfCircle beard; point(40,10), point(50,20)
 
     // rectangle hat(point(0, 0), point(14, 5));
     // line brim(point(0,15),17);
@@ -33,59 +34,45 @@ MyShape::MyShape(Point a, Point b) : Rectangle(a, b)
 {
     int ll = neast().x - swest().x + 1;
     int hh = neast().y - swest().y + 1;
+
     this->l_eye = new Line(Point(swest().x + 2, swest().y + hh * 3 / 4), 2);
     this->r_eye = new Line(Point(swest().x + ll - 4, swest().y + hh * 3 / 4), 2);
+    this->beard = new HalfCircle(Point(a.x + 1, a.y), Point(b.x - 1, b.y), false);
+    down(this->beard, this);
 }
 
 void MyShape::draw()
 {
+    // Контур лица
     Rectangle::draw();
+
+    // Нос
     Screen::put_point(
         (swest().x + neast().x) / 2,
         (swest().y + neast().y) / 2
     );
+
+    down(this->beard, this);
 }
 
 void MyShape::move(int a, int b)
 {
     Rectangle::move(a, b);
-    l_eye->move(a, b);
-    r_eye->move(a, b);
+    this->l_eye->move(a, b);
+    this->r_eye->move(a, b);
 }
 
 int main()
 {
-    // Screen::screen_clear();
-
-    auto p1 = new Rectangle(Point(0, 0), Point(14, 5));
-    auto p2 = new Line(Point(0, 15), 17);
+    // auto p1 = new Rectangle(Point(0, 0), Point(14, 5));
+    // auto p2 = new Line(Point(0, 15), 17);
     auto p3 = new MyShape(Point(15, 10), Point(27, 18));
-    auto p4 = new RightTriangle(Point(31, 5), Point(36, 1));
-    auto p5 = new RightTriangle(Point(41, 5), Point(46, 1));
-    auto p6 = new RightTriangle(Point(31, 15), Point(36, 11));
-    auto p7 = new RightTriangle(Point(41, 15), Point(46, 11));
 
-    Screen::shape_refresh();
-    std::cin.get();
+    // p1->rotate_right();
+    // p3->move(-10, 10);
 
-    p1->rotate_right();
-    p4->flip_vertically();
-    p6->flip_vertically();
-
-    Screen::shape_refresh();
-    std::cin.get();
-
-    p3->move(30,0);
-    p3->move(-10,10);
-
-    up(p2, p3);
-    up(p1, p2);
-    leftUp(p4,p2);
-    rightUp(p5,p2);
-    leftDown(p7,p3);
-    rightDown(p6,p3);
-    p6->move(-6,4);
-    p7->move(6,4);
+    // up(p2, p3);
+    // up(p1, p2);
 
     Screen::shape_refresh();
     std::cin.get();
