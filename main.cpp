@@ -16,6 +16,9 @@ class MyShape : public Rectangle
 
     HalfCircle* beard;
 
+    // рот
+    Line* mouth;
+
     // Rectangle* hat; point(0, 0), point(14, 5)
     // Line* brim; point(0,15), 17
 
@@ -37,6 +40,7 @@ MyShape::MyShape(Point a, Point b) : Rectangle(a, b)
 
     this->l_eye = new Line(Point(swest().x + 2, swest().y + hh * 3 / 4), 2);
     this->r_eye = new Line(Point(swest().x + ll - 4, swest().y + hh * 3 / 4), 2);
+    this->mouth = new Line(Point(swest().x + 2, swest().y + hh / 4), ll - 4);
     this->beard = new HalfCircle(Point(a.x + 1, a.y), Point(b.x - 1, b.y), false);
     down(this->beard, this);
 }
@@ -60,19 +64,22 @@ void MyShape::move(int a, int b)
     Rectangle::move(a, b);
     this->l_eye->move(a, b);
     this->r_eye->move(a, b);
+    this->mouth->move(a, b);
+    this->beard->move(a, b);
 }
 
 int main()
 {
-    // auto p1 = new Rectangle(Point(0, 0), Point(14, 5));
-    // auto p2 = new Line(Point(0, 15), 17);
-    auto p3 = new MyShape(Point(15, 10), Point(27, 18));
+    auto hatRectangle = new Rectangle(Point(0, 0), Point(14, 5));
+    hatRectangle->rotate_right();
 
-    // p1->rotate_right();
-    // p3->move(-10, 10);
+    auto hatVisor = new Line(Point(0, 15), 25);
+    auto person = new MyShape(Point(15, 10), Point(27, 18));
 
-    // up(p2, p3);
-    // up(p1, p2);
+    person->move(-5, 0);
+
+    up(hatVisor, person);
+    up(hatRectangle, hatVisor);
 
     Screen::shape_refresh();
     std::cin.get();

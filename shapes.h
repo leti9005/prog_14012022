@@ -311,35 +311,3 @@ void down(IShape* p, const IShape* q)
 
     p->move(ps.x - qn.x, ps.y - qn.y - 1);
 }
-
-// void leftUp(IShape* p, const IShape* q)
-// {
-//     p->move(
-//         q->nwest().x - p->swest().x,
-//         q->nwest().y - p->swest().y + 1
-//     );
-// }
-
-// void rightUp(IShape* p, const IShape* q)
-// {
-//     p->move(
-//         q->neast().x - p->seast().x,
-//         q->nwest().y - p->swest().y + 1
-//     );
-// }
-
-// void rightDown(IShape* p, const IShape* q)
-// {
-//     p->move(
-//         q->east().x - p->west().x,
-//         q->swest().y - p->nwest().y
-//     );
-// }
-
-// void leftDown(IShape* p, const IShape* q)
-// {
-//     p->move(
-//         q->west().x - p->east().x,
-//         q->swest().y - p->nwest().y
-//     );
-// }
