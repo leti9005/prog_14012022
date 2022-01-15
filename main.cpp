@@ -15,7 +15,7 @@ class MyShape : public Rectangle
     RightTriangle* r_eye;
 
     // 1
-    HalfCircle* beard;
+    RightTriangle* beard;
 
     Line* mouth;
 
@@ -58,8 +58,11 @@ MyShape::MyShape(Point a, Point b) : Rectangle(a, b)
     this->r_eye->flip_vertically();
 
     this->mouth = new Line(Point(swest().x + 2, swest().y + hh / 4), ll - 4);
-    this->beard = new HalfCircle(Point(a.x + 1, a.y), Point(b.x - 1, b.y), false);
-    down(this->beard, this);
+    this->beard = new RightTriangle(
+        Point(swest().x, swest().y - 5),
+        Point(seast().x, seast().y - 1)
+    );
+    this->beard->flip_horisontally();
 }
 
 Point MyShape::get_nose_point() {
@@ -73,7 +76,7 @@ void MyShape::draw()
 {
     Rectangle::draw();
     Screen::put_point(this->get_nose_point());
-    down(this->beard, this);
+    this->beard->flip_horisontally();
 }
 
 void MyShape::move(int a, int b)
@@ -92,7 +95,7 @@ int main()
     auto hatVisor = new Line(Point(0, 15), 25);
 
     auto person = new MyShape(Point(7, 5), Point(25, 15));
-    person->move(5, 3);
+    person->move(10, 3);
 
     up(hatVisor, person);
     up(hatRectangle, hatVisor);
