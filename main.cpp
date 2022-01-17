@@ -76,7 +76,6 @@ void MyShape::draw()
 {
     Rectangle::draw();
     Screen::put_point(this->get_nose_point());
-    this->beard->flip_horisontally();
 }
 
 void MyShape::move(int a, int b)

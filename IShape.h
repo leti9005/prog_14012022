@@ -1,16 +1,17 @@
 #pragma once
 
+#include <vector>
 #include "Point.h"
+
+using namespace std;
 
 struct IShape
 {
-    static IShape* current;
-    IShape* next;
+    static vector<IShape*> shapes;
 
     IShape()
     {
-        this->next = IShape::current;
-        IShape::current = this;
+        IShape::shapes.push_back(this);
     }
 
     virtual Point north() const = 0;
@@ -26,4 +27,4 @@ struct IShape
     virtual void move(int, int) = 0;
 };
 
-IShape* IShape::current = nullptr;
+vector<IShape*> IShape::shapes = vector<IShape*>();

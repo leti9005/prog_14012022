@@ -39,7 +39,10 @@ struct Screen {
     static void shape_refresh()
     {
         Screen::screen_clear();
-        for (IShape *p = IShape ::current; p; p = p->next) p->draw();
+        for (auto p: IShape::shapes)
+        {
+            p->draw();
+        }
 
         Screen::screen_refresh();
     }
