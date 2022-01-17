@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Point.h"
-#include "IShape.h"
-#include "shapes.h"
+#include "../base/Point.h"
+#include "../base/IShape.h"
+#include "Line.h"
+#include "RightTriangle.h"
+#include "Rectangle.h"
 
 // Челик
 class PersonShape : public Rectangle

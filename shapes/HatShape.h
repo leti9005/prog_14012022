@@ -1,8 +1,11 @@
 #pragma once
 
-#include "Point.h"
-#include "IShape.h"
-#include "shapes.h"
+#include "../base/Point.h"
+#include "../base/IShape.h"
+#include "Rectangle.h"
+#include "Line.h"
+#include "RightTriangle.h"
+
 
 class HatShape : public IShape
 {

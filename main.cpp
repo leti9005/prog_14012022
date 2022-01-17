@@ -1,8 +1,8 @@
 #include <iostream>
 #include "screen.h"
-#include "shapes.h"
-#include "HatShape.h"
-#include "PersonShape.h"
+#include "utils.h"
+#include "shapes/HatShape.h"
+#include "shapes/PersonShape.h"
 
 using namespace std;
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "Point.h"
-#include "IShape.h"
+#include "base/Point.h"
+#include "base/IShape.h"
 
 const int XMAX = 80; // Размер экрана
 const int YMAX = 30;
