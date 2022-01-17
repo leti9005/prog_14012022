@@ -64,9 +64,9 @@ class Rectangle : public IRotatable
     Point south() const { return Point((sw.x + ne.x) / 2, sw.y); }
     Point east() const { return Point(sw.x, (sw.y + ne.y) / 2); }
     Point west() const { return Point(ne.x, (sw.y + ne.y) / 2); }
-    Point neast() const { return ne; }
     Point seast() const { return Point(ne.x, sw.y); }
     Point nwest() const { return Point(sw.x, ne.y); }
+    Point neast() const { return ne; }
     Point swest() const { return sw; }
 
     // Поворот вправо относительно se
