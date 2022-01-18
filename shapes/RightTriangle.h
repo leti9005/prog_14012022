@@ -1,13 +1,12 @@
 #pragma once
 
+#include "../base/IReflectable.h"
+#include "../base/IRotatable.h"
 #include "../base/Point.h"
 #include "../screen.h"
-#include "../base/IRotatable.h"
-#include "../base/IReflectable.h"
 
 class RightTriangle : public IRotatable, public IReflectable
 {
-
     /* ---
         nw        n         ne
         |    -
@@ -20,9 +19,14 @@ class RightTriangle : public IRotatable, public IReflectable
 
     Point h1, h2, a1;
 
-  public:
+public:
     RightTriangle(Point a, Point b)
     {
+        if (a.x < 0 || a.y < 0 || b.x < 0 || b.y < 0)
+        {
+            throw Exception(a, b, "Incorrect RightTriangle constructor arguments.");
+        }
+
         if (a.x <= b.x)
         {
             if (a.y >= b.y)
@@ -46,12 +50,21 @@ class RightTriangle : public IRotatable, public IReflectable
     int height() const { return (max(h1.y, h2.y) - min(h1.y, h2.y)); }
     int margin_y() const { return min(min(h1.y, h2.y), a1.y); }
 
-    Point north() const { return Point(margin_x() + width() / 2, margin_y() + height()); }
+    Point north() const
+    {
+        return Point(margin_x() + width() / 2, margin_y() + height());
+    }
     Point south() const { return Point(margin_x() + width() / 2, margin_y()); }
     Point west() const { return Point(margin_x(), margin_y() + height() / 2); }
-    Point east() const { return Point(margin_x() + width(), margin_y() + height() / 2); }
+    Point east() const
+    {
+        return Point(margin_x() + width(), margin_y() + height() / 2);
+    }
     Point nwest() const { return Point(margin_x(), margin_y() + height()); }
-    Point neast() const { return Point(margin_x() + width(), margin_y() + height()); }
+    Point neast() const
+    {
+        return Point(margin_x() + width(), margin_y() + height());
+    }
     Point swest() const { return Point(margin_x(), margin_y()); }
     Point seast() const { return Point(margin_x() + width(), margin_y()); }
 
@@ -76,7 +89,7 @@ class RightTriangle : public IRotatable, public IReflectable
         h1.y = a1.y + w;
         h1.x = h2.x;
         a1.y = h1.y;
-        a1.x = h1.x-h;
+        a1.x = h1.x - h;
         h2.x = a1.x;
     }
 
@@ -112,6 +125,24 @@ class RightTriangle : public IRotatable, public IReflectable
     }
 
     void draw();
+
+    class Exception
+    {
+        Point a;
+        Point b;
+        std::string message;
+
+    public:
+        Exception(Point p0, Point p1, std::string str) : a(p0), b(p1), message(str) {};
+        std::string what() { return message; }
+
+        std::string get_points_message()
+        {
+            return
+                "(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ") " +
+                "(" + std::to_string(b.x) + ", " + std::to_string(b.y) + ") ";
+        }
+    };
 };
 
 void RightTriangle::draw()

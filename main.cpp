@@ -18,5 +18,31 @@ int main()
     Screen::shape_refresh();
     std::cin.get();
 
+    try
+    {
+        cout << "Try moving the shape outside of screen" << endl;
+        person->move(100000, 3);
+        Screen::shape_refresh();
+    }
+    catch (OutsideOfScreenException& e)
+    {
+        std::cerr << e.get_error_message() << '\n';
+    }
+
+    std::cin.get();
+    cout << "Try creating bad triangle" << endl;
+    Screen::screen_clear();
+
+    try
+    {
+        RightTriangle badTriangle(
+            Point(-124124, -1), Point(-100, 1)
+        );
+    }
+    catch (RightTriangle::Exception e)
+    {
+        std::cerr << e.what() << '\n' << e.get_points_message() << endl;
+    }
+
     return 0;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <exception>
 #include "base/Point.h"
 #include "base/IShape.h"
 
@@ -16,18 +17,32 @@ enum Color
 
 char _screen[XMAX][YMAX];
 
+class OutsideOfScreenException
+{
+    Point p;
+public:
+    OutsideOfScreenException(Point p0) : p(p0) {}
+
+    std::string get_error_message() {
+        return "Point outside of screen (" + this->p.to_string() + ")";
+    }
+};
+
 // Экран
 struct Screen {
     // Проверка попадания на экран
-    static int on_screen(int a, int b)
+    static void assert_on_screen(int a, int b)
     {
-        return 0 <= a && a < XMAX && 0 <= b && b < YMAX;
+        if (0 <= a && a < XMAX && 0 <= b && b < YMAX) return;
+
+        throw OutsideOfScreenException(Point(a, b));
     }
 
     static void put_point(int a, int b)
     {
-        if (on_screen(a, b))
-            _screen[a][b] = Color::Black;
+        assert_on_screen(a, b);
+
+        _screen[a][b] = Color::Black;
     }
 
     static void put_point(Point p)
